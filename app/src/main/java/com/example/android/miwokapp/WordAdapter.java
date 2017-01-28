@@ -44,6 +44,14 @@ public class WordAdapter extends ArrayAdapter<Word> {
         // Get the version name from the current AndroidFlavor object and
         // set this text on the name TextView
         name1TextView.setText(currentAndroidFlavor.getMiwokTrasnaltion());
+
+
+            ImageView imageView = (ImageView) listItemView.findViewById(R.id.imageView);
+        if(currentAndroidFlavor.hasImage())
+            imageView.setImageResource(currentAndroidFlavor.getmImageResourceId());
+        else
+            imageView.setVisibility(View.GONE);
+
         return listItemView;
     }
 }
