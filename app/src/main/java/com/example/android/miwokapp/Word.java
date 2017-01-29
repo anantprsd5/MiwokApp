@@ -49,4 +49,17 @@ public class Word {
     public boolean hasImage(){
         return mImageResourceId!=NO_IMAGE;
     }
+
+    @Override
+    public String toString() {
+        return "Word{" +
+                "mDefaultTranslation='" + mDefaultTranslation + '\'' +
+                ", mMiwokTranslation='" + mMiwokTrasnaltion + '\'' +
+                ", mAudioResourceId=" + mSoundResourceId +
+                ", mImageResourceId=" + mImageResourceId +
+                '}';
+
+    }
+
+
 }
