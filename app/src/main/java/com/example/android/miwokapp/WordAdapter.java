@@ -1,12 +1,16 @@
 package com.example.android.miwokapp;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,6 +20,8 @@ import java.util.ArrayList;
  */
 
 public class WordAdapter extends ArrayAdapter<Word> {
+
+    private MediaPlayer mediaPlayer;
 
     public WordAdapter(Activity context, ArrayList<Word> words){
         super(context, 0, words);
@@ -32,7 +38,9 @@ public class WordAdapter extends ArrayAdapter<Word> {
             listItemView= LayoutInflater.from(getContext()).inflate(R.layout.list_item,parent,false);
         }
 
+
         Word currentAndroidFlavor = getItem(position);
+
 
         // Find the TextView in the list_item.xml layout with the ID version_name
         TextView nameTextView = (TextView) listItemView.findViewById(R.id.default_text_view);

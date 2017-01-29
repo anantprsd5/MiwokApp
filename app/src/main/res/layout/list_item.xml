@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/category_numbers">
+        android:background="@color/category_numbers"
+        android:id="@+id/click">
 
         <TextView
         android:id="@+id/default_text_view"
