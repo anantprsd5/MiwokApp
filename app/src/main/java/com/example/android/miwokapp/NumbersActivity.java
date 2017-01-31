@@ -1,5 +1,7 @@
 package com.example.android.miwokapp;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +66,13 @@ public class NumbersActivity extends AppCompatActivity {
 
                 Word word = words.get(position);
                 Log.d("NumbersActivity", "Current word: " + word);
+                AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                int result = am.requestAudioFocus(AudioManager.OnAudioFocusChangeListener l,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                        // Use the music stream.
+                        AudioManager.STREAM_MUSIC,
+                        // Request permanent focus.
+                        AudioManager.AUDIOFOCUS_GAIN);
+
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), word.getSoundResourceId());
                 mediaPlayer.start();
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
