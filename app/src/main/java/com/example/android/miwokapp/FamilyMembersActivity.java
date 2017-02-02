@@ -16,7 +16,6 @@ public class FamilyMembersActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
     private String TAG = "FamilyActivity";
-    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
     AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
@@ -37,6 +36,8 @@ public class FamilyMembersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
+
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
         final int result = audioManager.requestAudioFocus(afChangeListener,
                 // Use the music stream.
