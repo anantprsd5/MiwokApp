@@ -1,8 +1,11 @@
 package com.example.android.miwokapp;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,11 +15,35 @@ import java.util.ArrayList;
 public class FamilyMembersActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
+    private String TAG = "FamilyActivity";
+    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+    AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
+            {
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);
+            }
+            else if(focusChange == AudioManager.AUDIOFOCUS_GAIN){
+                mediaPlayer.start();
+            }
+            else if(focusChange == AudioManager.AUDIOFOCUS_LOSS)
+                releaseMediaPlayer();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
+
+        final int result = audioManager.requestAudioFocus(afChangeListener,
+                // Use the music stream.
+                AudioManager.STREAM_MUSIC,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+
 
         // Create a list of words
         final ArrayList<Word> words = new ArrayList<Word>();
@@ -54,14 +81,18 @@ public class FamilyMembersActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Word word = words.get(position);
-                mediaPlayer= MediaPlayer.create(getApplicationContext(),word.getSoundResourceId());
-                mediaPlayer.start();
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        releaseMediaPlayer();
-                    }
-                });
+                if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), word.getSoundResourceId());
+                    mediaPlayer.start();
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            releaseMediaPlayer();
+                            Log.d(TAG, "MediaPlayer Released");
+
+                        }
+                    });
+                }
             }
 
         });

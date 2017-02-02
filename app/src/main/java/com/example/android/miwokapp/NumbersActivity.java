@@ -1,6 +1,7 @@
 package com.example.android.miwokapp;
 
 import android.content.Context;
+import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -21,12 +22,38 @@ import java.util.ArrayList;
 public class NumbersActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
+    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+    AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
+            {
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);
+            }
+            else if(focusChange == AudioManager.AUDIOFOCUS_GAIN){
+                mediaPlayer.start();
+            }
+            else if(focusChange == AudioManager.AUDIOFOCUS_LOSS)
+                releaseMediaPlayer();
+        }
+    };
     private String TAG = "NumbersActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
+
+
+
+        final int result = audioManager.requestAudioFocus(afChangeListener,
+                // Use the music stream.
+                AudioManager.STREAM_MUSIC,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+
+
 
         // Create a list of words
         final ArrayList<Word> words = new ArrayList<Word>();
@@ -66,23 +93,18 @@ public class NumbersActivity extends AppCompatActivity {
 
                 Word word = words.get(position);
                 Log.d("NumbersActivity", "Current word: " + word);
-                AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-                int result = am.requestAudioFocus(AudioManager.OnAudioFocusChangeListener l,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-                        // Use the music stream.
-                        AudioManager.STREAM_MUSIC,
-                        // Request permanent focus.
-                        AudioManager.AUDIOFOCUS_GAIN);
+                if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), word.getSoundResourceId());
+                    mediaPlayer.start();
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            releaseMediaPlayer();
+                            Log.d(TAG, "MediaPlayer Released");
 
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), word.getSoundResourceId());
-                mediaPlayer.start();
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        releaseMediaPlayer();
-                        Log.d(TAG,"MediaPlayer Released");
-
-                    }
-                });
+                        }
+                    });
+                }
             }
 
         });
@@ -99,6 +121,7 @@ public class NumbersActivity extends AppCompatActivity {
             // setting the media player to null is an easy way to tell that the media player
             // is not configured to play an audio file at the moment.
             mediaPlayer = null;
+            audioManager.abandonAudioFocus(afChangeListener);
         }
     }
 
