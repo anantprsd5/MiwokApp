@@ -4,8 +4,10 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -21,8 +23,10 @@ public class FamilyMembersActivity extends AppCompatActivity {
         public void onAudioFocusChange(int focusChange) {
             if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
             {
-                mediaPlayer.pause();
-                mediaPlayer.seekTo(0);
+                if(mediaPlayer!=null) {
+                    mediaPlayer.pause();
+                    mediaPlayer.seekTo(0);
+                }
             }
             else if(focusChange == AudioManager.AUDIOFOCUS_GAIN){
                 mediaPlayer.start();
@@ -99,6 +103,17 @@ public class FamilyMembersActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void releaseMediaPlayer() {
         // If the media player is not null, then it may be currently playing a sound.
         if (mediaPlayer != null) {
@@ -112,4 +127,5 @@ public class FamilyMembersActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
     }
+
 }

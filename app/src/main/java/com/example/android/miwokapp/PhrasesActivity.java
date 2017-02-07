@@ -16,14 +16,16 @@ public class PhrasesActivity extends AppCompatActivity {
 
     private String TAG = "PhrasesActivity";
     private MediaPlayer mediaPlayer;
-    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+    AudioManager audioManager;
     AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
             if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
             {
-                mediaPlayer.pause();
-                mediaPlayer.seekTo(0);
+                if(mediaPlayer!=null) {
+                    mediaPlayer.pause();
+                    mediaPlayer.seekTo(0);
+                }
             }
             else if(focusChange == AudioManager.AUDIOFOCUS_GAIN){
                 mediaPlayer.start();
@@ -38,6 +40,8 @@ public class PhrasesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
 
+
+        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         final int result = audioManager.requestAudioFocus(afChangeListener,
                 // Use the music stream.
                 AudioManager.STREAM_MUSIC,
@@ -96,6 +100,7 @@ public class PhrasesActivity extends AppCompatActivity {
 
         });
     }
+
 
     private void releaseMediaPlayer() {
         // If the media player is not null, then it may be currently playing a sound.

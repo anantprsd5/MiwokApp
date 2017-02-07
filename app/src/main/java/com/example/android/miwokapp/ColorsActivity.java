@@ -20,15 +20,17 @@ import java.util.ArrayList;
 public class ColorsActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
+    private AudioManager audioManager;
     private String TAG="ColorsActivity";
-    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
     AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
             if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)
             {
-                mediaPlayer.pause();
-                mediaPlayer.seekTo(0);
+                if(mediaPlayer!=null) {
+                    mediaPlayer.pause();
+                    mediaPlayer.seekTo(0);
+                }
             }
             else if(focusChange == AudioManager.AUDIOFOCUS_GAIN){
                 mediaPlayer.start();
@@ -43,6 +45,7 @@ public class ColorsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
 
+        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         final int result = audioManager.requestAudioFocus(afChangeListener,
                 // Use the music stream.
                 AudioManager.STREAM_MUSIC,
