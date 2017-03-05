@@ -17,12 +17,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
@@ -35,46 +32,55 @@ public class MainActivityTest {
 
     @Test
     public void mainActivityTest() {
-        ViewInteraction appCompatTextView = onView(
-                allOf(withId(R.id.numbers), withText("Numbers"), isDisplayed()));
-        appCompatTextView.perform(click());
-
-        ViewInteraction linearLayout = onView(
-                allOf(withId(R.id.list_layout),
-                        childAtPosition(
-                                allOf(withId(R.id.list),
-                                        withParent(withId(android.R.id.content))),
-                                0),
-                        isDisplayed()));
-        linearLayout.perform(click());
-
-        pressBack();
-
-        ViewInteraction appCompatTextView2 = onView(
-                allOf(withId(R.id.family), withText("Family Members"), isDisplayed()));
-        appCompatTextView2.perform(click());
-
         ViewInteraction textView = onView(
-                allOf(withId(R.id.default_text_view), withText("father"),
+                allOf(withId(R.id.numbers), withText("Numbers"),
                         childAtPosition(
-                                allOf(withId(R.id.click),
-                                        childAtPosition(
-                                                withId(R.id.list_layout),
-                                                1)),
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
                                 0),
                         isDisplayed()));
-        textView.check(matches(withText("father")));
+        textView.check(matches(withText("Numbers")));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.default_text_view), withText("mother"),
+                allOf(withId(R.id.family), withText("Family Members"),
                         childAtPosition(
-                                allOf(withId(R.id.click),
-                                        childAtPosition(
-                                                withId(R.id.list_layout),
-                                                1)),
-                                0),
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
                         isDisplayed()));
-        textView2.check(matches(withText("mother")));
+        textView2.check(matches(withText("Family Members")));
+
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.colors), withText("Colors"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        textView3.check(matches(withText("Colors")));
+
+        ViewInteraction textView4 = onView(
+                allOf(withId(R.id.phrases), withText("Phrases"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        textView4.check(matches(withText("Phrases")));
+
+        ViewInteraction textView5 = onView(
+                allOf(withId(R.id.phrases), withText("Phrases"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        textView5.check(matches(withText("Phrases")));
 
     }
 

@@ -52,7 +52,7 @@ public class FamilyMembersActivity extends AppCompatActivity {
 
         // Create a list of words
         final ArrayList<Word> words = new ArrayList<Word>();
-        words.add(new Word("father", "әpә",R.drawable.family_father,R.raw.family_father));
+        words.add(new Word("father3", "әpә",R.drawable.family_father,R.raw.family_father));
         words.add(new Word("mother", "әṭa",R.drawable.family_mother,R.raw.family_mother));
         words.add(new Word("son", "angsi",R.drawable.family_son,R.raw.family_son));
         words.add(new Word("daughter", "tune",R.drawable.family_daughter,R.raw.family_daughter));
