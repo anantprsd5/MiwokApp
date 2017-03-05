@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 public class WordAdapter extends ArrayAdapter<Word> {
 
-    private MediaPlayer mediaPlayer;
-
     public WordAdapter(Activity context, ArrayList<Word> words){
         super(context, 0, words);
     }
