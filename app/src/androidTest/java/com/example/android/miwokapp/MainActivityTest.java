@@ -72,16 +72,6 @@ public class MainActivityTest {
                         isDisplayed()));
         textView4.check(matches(withText("Phrases")));
 
-        ViewInteraction textView5 = onView(
-                allOf(withId(R.id.phrases), withText("Phrases"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        textView5.check(matches(withText("Phrases")));
-
     }
 
     private static Matcher<View> childAtPosition(
